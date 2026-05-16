@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise Khusus Untukmu ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #ffeef2;
+            font-family: 'Quicksand', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- LAYAR AWAL (SURPRISE GATE) --- */
+        #gate {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 100;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; flex-direction: column; transition: 1s;
+        }
+        .box { font-size: 80px; animation: bounce 1.5s infinite; }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* --- KARTU UTAMA --- */
+        .card {
+            width: 92%; max-width: 450px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 15px; border-radius: 25px;
+            text-align: center; box-shadow: 0 20px 50px rgba(255, 182, 193, 0.5);
+            border: 3px solid #ffb6c1; z-index: 10;
+            transform: scale(0); transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card.show { transform: scale(1); }
+
+        /* --- PHOTO BERJEJER KECIL --- */
+        .photo-wrap {
+            display: flex; justify-content: space-around;
+            gap: 8px; margin-bottom: 25px; position: relative;
+        }
+        .polaroid {
+            background: white; padding: 4px 4px 15px 4px;
+            width: 30%; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #ffe4e1;
+        }
+        .polaroid img {
+            width: 100%; height: 100px; object-fit: cover;
+            border-radius: 4px;
+        }
+        /* Hiasan miring estetik */
+        .polaroid:nth-child(1) { transform: rotate(-8deg); }
+        .polaroid:nth-child(2) { transform: translateY(-10px); }
+        .polaroid:nth-child(3) { transform: rotate(8deg); }
+
+        /* --- HIASAN --- */
+        .sticker { position: absolute; font-size: 25px; z-index: 11; }
+        .s1 { top: -15px; left: -10px; }
+        .s2 { bottom: -15px; right: -10px; }
+        .s3 { top: 40%; left: -20px; transform: rotate(-20deg); }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #d81b60; font-size: 2.2rem; margin-bottom: 15px;
+        }
+        #text-typed { font-weight: 600; color: #555; line-height: 1.6; min-height: 80px; }
+
+        /* --- HUJAN EMOJI 💖 --- */
+        .heart {
+            position: absolute; top: -50px; font-size: 24px;
+            user-select: none; pointer-events: none;
+            animation: fall linear forwards; z-index: 1;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="gate" onclick="openSurprise()">
+        <div class="box">🎁</div>
+        <p style="margin-top:20px; color:#d81b60; font-weight:bold;">Sentuh kadonya!</p>
+    </div>
+
+    <div class="card" id="mainCard">
+        <span class="sticker s1">🌸</span>
+        <span class="sticker s2">✨</span>
+        <span class="sticker s3">🦋</span>
+
+        <div class="photo-wrap">
+            <div class="polaroid">
+                <img src="foto1.jpg">
+            </div>
+            <div class="polaroid">
+                <img src="foto2.jpg">
+            </div>
+            <div class="polaroid">
+                <img src="foto3.jpg">
+            </div>
+        </div>
+
+        <h1>Selamat Ulang Tahun!!!</h1>
+        <div id="text-typed"></div>
+        <p style="margin-top:15px; font-size:12px; color:#aaa;">I loveeeeeeee youuuuuuu foreverrrr sayaaaaaaaaaaaaanggggggg ❤️‍🔥❤️‍🔥❤️‍🔥</p>
+    </div>
+
+    <script>
+        const msg = "adaa 3 foto orangg cantikk nichhh💖💖💖 \n\nSelamatt ulangg tahunnn yaaaaaaaaaachhhh cantiiiiiiiiiiiiiiiikkkkuuuuuuuuuuuuuu!!!!!,panjangg umurr sayaaaaaaaaaaaaanggggggg,sehatt selaluuu,makasihhh yaaaaaa udahhh mauuu samaa i,semogaaa kitaa tetapp samaa selamanyaaa sayaaaaaaaaaaaaanggggggg,jangann sukaa terlambatt makannn yaaaaaaaaaachhhh sayaaaaaaaaaaaaanggggggkuuuu,jangann seringg marahh marahhh samaa i yaaaaaaaaaachhhh sayaaaaaaaaaaaaanggggggg,jangann seringg badmood samaa i jugaaa cintaaaaaaaaaaaaaaaaakuuuuuuu💝💝💝💝💝";
+        let charIdx = 0;
+
+        function openSurprise() {
+            // Hilangkan gerbang
+            document.getElementById('gate').style.opacity = '0';
+            setTimeout(() => document.getElementById('gate').style.display = 'none', 1000);
+            
+            // Tampilkan kartu
+            document.getElementById('mainCard').classList.add('show');
+            
+            // Mulai hujan emoji
+            setInterval(createHeart, 200);
+            
+            // Mulai ketikan
+            typeWriter();
+        }
+
+        function typeWriter() {
+            if (charIdx < msg.length) {
+                let char = msg.charAt(charIdx);
+                document.getElementById("text-typed").innerHTML += (char === "\n") ? "<br>" : char;
+                charIdx++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '💖';
+            heart.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 3 + 2;
+            heart.style.animationDuration = duration + 's';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), duration * 1000);
+        }
+    </script>
+</body>
+</html>
